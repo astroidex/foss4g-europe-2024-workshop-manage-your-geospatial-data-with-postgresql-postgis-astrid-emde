@@ -181,11 +181,11 @@ SELECT * FROM spatial_ref_sys WHERE srid=4326;
 ```
 
 ```sql
-Select ST_Letters('Good morning at FOSS4G Europe 2024');
+Select ST_Letters('Good time at FOSS4G Europe 2024');
 ```
 
 ```sql
-SELECT ST_SetSrid(ST_Translate(ST_Scale(ST_Letters('Good morning at FOSS4G 2024'), 0.00005, 0.00005), 20.710389,42.208611),4326);
+SELECT ST_SetSrid(ST_Translate(ST_Scale(ST_Letters('Good time at FOSS4G 2024'), 0.00005, 0.00005), 26.716230 , 58.373440),4326);
 ```
 
 ![](img/st_letters.png)
@@ -542,7 +542,7 @@ SELECT c.gid,
     AND p.gid = c.gid;
 ```
 
-* get back to your cities table from **_Excercise 4_**. Calculate the distance between Prizren and your home town.
+* get back to your cities table from **_Excercise 4_**. Calculate the distance between Tartu and your home town.
 * use the spheroid for your calculations (use geography)
 * https://postgis.net/docs/ST_Distance.html
 
@@ -551,11 +551,11 @@ SELECT g.name, you.name, ST_Distance(g.geom, you.geom, true)
   FROM cities g, 
   cities you 
   WHERE 
-    g.name = 'Prizren'
+    g.name = 'Tartu'
     AND you.name='Cologne';
 ```
 
-* Question: Who had the longest distance to travel to Prizren?
+* Question: Who had the longest distance to travel to Tartu?
 
 ![](img/st_distance.png)
 
@@ -811,7 +811,7 @@ Then you can access the tables from the foreign database easily.
 1. create a foreign server to osm_local
 1. create a user mapping for user **_user_**
 1. Import all tables except spatial_ref_sys, geometry_columns, geography_columns
-1. find out which bars/pubs are close to the Prizren Mosk (see your table cities)
+1. find out which bars/pubs are close to the Tartu Department of Geography(see your table cities)
 
 Step 1-4: 
 
@@ -832,7 +832,7 @@ IMPORT FOREIGN SCHEMA public
     INTO public;
 ```
 
-Use KNN (K nearest neighbor) to find the 5 closest pubs/bars from the Prizren Mosk (see table cities)
+Use KNN (K nearest neighbor) to find the 5 closest pubs/bars from Tartu Department of Geography (see table cities)
 
 ```sql  
 CREATE VIEW qry_next_5_bars as   
@@ -840,7 +840,7 @@ SELECT p.osm_id, p.name, p.amenity, p.way as geom
  FROM cities c,
  planet_osm_point p
   WHERE p.amenity IN ( 'bar' , 'pub')
-   AND c.name = 'Prizren'
+   AND c.name = 'Tartu'
     ORDER BY
     c.geom <-> p.way
     LIMIT 5;
@@ -850,7 +850,7 @@ SELECT p.osm_id, p.name, p.amenity, p.way as geom
 Select * from qry_next_5_bars
 ```
 
-Use KNN (K nearest neighbor) to find the pubs/bars less then 100 m distance from the Prizren Mosk (see table cities)
+Use KNN (K nearest neighbor) to find the pubs/bars less then 100 m distance from Tartu Department of Geography (see table cities)
 
 
 ```sql
@@ -860,7 +860,7 @@ SELECT p.osm_id, p.name, p.amenity, p.way as geom,
  FROM cities c,
  planet_osm_point p
   WHERE p.amenity IN ( 'bar' , 'pub')
-   AND c.name = 'Prizren'
+   AND c.name = 'Tartu'
    AND st_distance(c.geom, p.way, true) < 100
     ORDER BY
     c.geom <-> p.way;
@@ -870,13 +870,13 @@ SELECT p.osm_id, p.name, p.amenity, p.way as geom,
 Select * from qry_next_bars_100;
 ```
 
-Create the 100 m buffer around the Prizren Mosk.
+Create the 100 m buffer around the Tartu Department of Geography.
 
 ```sql
 CREATE view qry_buffer_mosk_100 as
  SELECT gid, st_buffer(geom::geography,100)::geometry as geom
   FROM cities 
-   WHERE name = 'Prizren';
+   WHERE name = 'Tartu';
 ```
 
 
@@ -945,7 +945,7 @@ GRANT USAGE ON SEQUENCE cities_gid_seq TO workshop_writer;
 -- change to user wilma in pgAdmin
 -- Run the following SQL
 SELECT * from cities;
-UPDATE cities SET name = 'TEST' WHERE name = 'Prizren';
+UPDATE cities SET name = 'TEST' WHERE name = 'Tartu';
 ```
 
 ## What is coming next?
