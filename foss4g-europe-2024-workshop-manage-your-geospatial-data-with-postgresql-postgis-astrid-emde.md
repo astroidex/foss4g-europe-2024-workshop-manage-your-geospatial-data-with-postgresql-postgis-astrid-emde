@@ -185,7 +185,7 @@ Select ST_Letters('Good time at FOSS4G Europe 2024');
 ```
 
 ```sql
-SELECT ST_SetSrid(ST_Translate(ST_Scale(ST_Letters('Good time at FOSS4G 2024'), 0.00005, 0.00005), 26.716230 , 58.373440),4326);
+SELECT ST_SetSrid(ST_Translate(ST_Scale(ST_Letters('Good time at FOSS4G Europe 2024'), 0.00005, 0.00005), 26.700000 , 58.373440),4326);
 ```
 
 ![](img/st_letters.png)
@@ -873,7 +873,7 @@ Select * from qry_next_bars_100;
 Create the 100 m buffer around the Tartu Department of Geography.
 
 ```sql
-CREATE view qry_buffer_mosk_100 as
+CREATE view qry_buffer_100 as
  SELECT gid, st_buffer(geom::geography,100)::geometry as geom
   FROM cities 
    WHERE name = 'Tartu';
@@ -883,14 +883,14 @@ CREATE view qry_buffer_mosk_100 as
 Create an intersection between the buffer area and the OSM buildings.
 
 ```sql
-CREATE view qry_intersection_buffer_100_buildings as
+CREATE view qry_intersection_buffer_500_buildings as
 SELECT p.osm_id, p.way as geom, 
  p.name,
  p.building, 
  ST_Multi(ST_Intersection(p.way, s.geom))::geometry(multipolygon,4326) geom_intersection
  FROM 
  planet_osm_polygon p,
- qry_buffer_mosk_100 s
+ qry_buffer_500 s
   WHERE 
   p.building IS NOT NULL AND
   ST_Intersects(p.way, s.geom);
