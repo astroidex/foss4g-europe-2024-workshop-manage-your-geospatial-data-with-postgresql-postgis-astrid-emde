@@ -1,0 +1,1 @@
+# foss4g-europe-2024-workshop-manage-your-geospatial-data-with-postgresql-postgis-astrid-emde
