@@ -24,6 +24,11 @@ Workshop Program Link https://talks.osgeo.org/foss4g-europe-2024-workshops/talk/
 ![FOSS Academy](img/FOSSAcademy.png)
 
 
+## Enock Seth Nyamador
+
+* Craft OpenStreetMap contributor & advocate for using Free and Open Source Software
+* https://en.osm.town/@Enock4seth
+
 ## What we learn 
 * Why database?
 * PostgreSQL / PostGIS
