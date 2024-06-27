@@ -634,35 +634,36 @@ SELECT a.*
 ```
 
 
-### Exercise 12: ST_Union - union all provinces from country Estonia to one area
+### Exercise 12: ST_Union - union all provinces from country Brazil to one area
 
-* Have a look at the provinces from Estonia and order them by size
-* Create a view called qry_estonia_union
+* Have a look at the provinces from Brazil and order them by size
+* Create a view called qry_provinces_union
 * use ST_UNION http://postgis.net/docs/ST_Union.html
-* use table ne_10m_admin_1_states_provinces_shp and filter by admin Estonia
-* add column admin to your view (admin='Estonia') - you have to use GROUP BY
+* use table ne_10m_admin_1_states_provinces_shp and filter by admin Brazil
+* add column admin to your view (admin='Brazil') - you have to use GROUP BY
 * typecast the geomety column
 * have a look at your result with QGIS
 
-Step 1: Have a look at the provinces from Estonia
+Step 1: Have a look at the provinces from Brazil
 
 ```sql
+CREATE VIEW qry_provinces AS
 SELECT gid, name, admin, geom, 
   round(ST_Area(geom, true)) as area,
   RANK() over (order by ST_Area(geom, true) desc)
   FROM ne_10m_admin_1_states_provinces_shp 
-  WHERE admin='Estonia'
+  WHERE admin='Brazil'
   ORDER BY area DESC;
 ```
 
 ![](img/provinces.png)
 
-Step 2: Union all provinces from Estonia via ST_UNION
+Step 2: Union all provinces from Brazil via ST_UNION
 
 ```sql
 SELECT ST_Union(geom)
   FROM public.ne_10m_admin_1_states_provinces_shp 
-  WHERE admin='Estonia';
+  WHERE admin='Brazil';
 ```
 
 Step 3: Add a row number and display the geometry as text
@@ -672,19 +673,20 @@ SELECT ROW_NUMBER() OVER () as gid,
   admin, 
   st_AsText(ST_Union(geom))
   FROM public.ne_10m_admin_1_states_provinces_shp 
-  WHERE admin='Estonia'
+  WHERE admin='Brazil'
   GROUP BY admin ;
 ```
 
 Step 4: Create a view. Assign the geometry type and projection to the new geom, add column admin (use GROUP BY)
 
 ```sql
-CREATE VIEW qry_estonia_union AS
+CREATE VIEW qry_provinces_union AS
 SELECT ROW_NUMBER() OVER () as gid, 
   admin, 
-  ST_Multi(ST_UNION(geom))::geometry(multipolygon,4326) as geom
+  ST_Multi(ST_UNION(geom))::geometry(multipolygon,4326) as geom,
+  round(ST_AREA(ST_Multi(ST_UNION(geom))::geometry(multipolygon,4326),true)/1000000) as area_km2 
   FROM public.ne_10m_admin_1_states_provinces_shp 
-  WHERE admin='Estonia'
+  WHERE admin='Brazil'
   GROUP BY admin ;
 ```
 
@@ -705,7 +707,8 @@ CREATE TABLE provinces_subdivided AS
   name, 
   admin, 
   ST_Subdivide(geom) AS geom
-  FROM ne_10m_admin_1_states_provinces_shp;
+  FROM ne_10m_admin_1_states_provinces_shp
+  where st_isvalid(geom) = true;
 
 ALTER TABLE provinces_subdivided ADD COLUMN gid serial PRIMARY KEY;
 ```
@@ -719,7 +722,8 @@ CREATE TABLE provinces_subdivided AS
   name, 
   admin, 
   st_subdivide(geom,20) AS geom
-  FROM ne_10m_admin_1_states_provinces_shp ;
+  FROM ne_10m_admin_1_states_provinces_shp 
+  where st_isvalid(geom) = true;
 
 ALTER TABLE provinces_subdivided ADD COLUMN gid serial PRIMARY KEY;
 ```
