@@ -57,13 +57,13 @@ You can download OSGeoLive with the following link. You can install OSGeoLive, r
 
 ## Actual Software Versions
 
-* PostgreSQL 15.3 (2024-05-11) https://www.postgresql.org/
-* PostGIS 3.3.3 (2024-05-30) https://postgis.net/
+* PostgreSQL 16.3 (2024-05-09) https://www.postgresql.org/
+* PostGIS 3.4.2 (2024-02-08) https://postgis.net/
 
 
 ### OSGeoLive 16.0
 
-* PostgreSQL 14.8
+* PostgreSQL 14.9
 * PostGIS 3.3.3
 
 ```sql
@@ -137,7 +137,7 @@ SELECT version(), postgis_version(), postgis_full_version();
 * http://postgis.net/docs/
 
 
-PostGIS turned 20 on 21. May 2021!
+PostGIS turned 23 on 21. May 2024!
 
 ![](img/elephant_confetti.png)
 
@@ -288,7 +288,7 @@ CREATE EXTENSION postgis;
 * https://live.osgeo.org/en/quickstart/postgis_quickstart.html
 * PostgreSQL provides utility programs like **_createdb_** and **_dropdb_** to communicate with the database
 
-Choose :menuselection:`Systems Tools --> LX Terminal` from menu to open a Terminal window.
+Choose from menu `Systems Tools --> LX Terminal` from menu to open a Terminal window.
 
 ```sql
 createdb -U user -e demo
@@ -387,7 +387,7 @@ SELECT ST_AsEWKT(geom), geom FROM cities; -- ohne SRID
 
 ### Excercise 5: QGIS: Load data from **_natural_earth2_** and from your new database
 
-1. Open QGIS. Choose :menuselection:`Geospatial --> Desktop QGIS --> QGIS Desktop` .
+1. Open QGIS. Choose from menu `Geospatial --> Desktop QGIS --> QGIS Desktop` .
 1. Load countries (table `ne_10m_admin_1_states_provinces_shp`) from the database natural_earth2
 1. Create a new PostGIS connection to your new database foss4g
 1. Load your new table cities
@@ -442,7 +442,7 @@ You can define a unique id, add colummns and define the geometry column.
 * The table needs a unique id, a column for the city name, maybe a column for the country name, a column for the year and a link to the website. 
 And do not miss a geometry column (POINT, SRID 4326). 
 * Also create a Spaltial Index on creation of the table.
-* Now you can start editing. You can add a point to this layer for Buenos Aires and add the additional information.
+* Now you can start editing. You can add a point to this layer for Belém Brasil and add the additional information. See all past FOSS4Gs at https://foss4g.org/
 * Now have a look at your new table with pgAdmin.
 
 Note: It is so easy to create tables in your database without using SQL.
@@ -451,7 +451,7 @@ Note: It is so easy to create tables in your database without using SQL.
 ## Get to know PostGIS functions
 
 * PostGIS Documentation http://postgis.net/docs/
-* PostGIS Vector Functions see Chapter 8: http://postgis.net/docs/reference.html
+* PostGIS Vector Functions see Chapter 7: http://postgis.net/docs/reference.html
 
 
 ### Geometry Constructors
@@ -547,7 +547,7 @@ SELECT c.gid,
     AND p.gid = c.gid;
 ```
 
-* get back to your cities table from **_Excercise 4_**. Calculate the distance between Tartu and your home town.
+* get back to your cities table from **_Excercise 5_**. Calculate the distance between Tartu and your home town.
 * use the spheroid for your calculations (use geography)
 * https://postgis.net/docs/ST_Distance.html
 
@@ -591,7 +591,6 @@ CREATE INDEX gist_cities_geom
 
 ### Exercise 11: Buffer populated places with 10 km
 
-* 
 * Buffer the table ne_10m_populated_places with 10 km
 * http://postgis.net/docs/ST_Buffer.html
 * Note that you have to use geography to create a buffer in meter - use typecast ::geography
