@@ -920,12 +920,12 @@ These roles can have different power and get access via GRANT to different objec
 
 ### Example 15: Create roles and grant access    
 
-#. Create a role workshop_read and workshop_writer
-#. Create a login role robert with a password and add to workshop_reader
-#. Create a new login role wilma and add wilma to the workshop_writer role
-#. Grant read access to table ne_10m_admin_1_states_provinces_shp to your new role workshop_reader
-#. Grant write access to table cities to your new role workshop_writer 
-#. Try to access and edit via QGIS 
+1. Create a role `workshop_reader` and `workshop_writer`
+1. Create a login role `robert` with a password and add to `workshop_reader`
+1. Create a new login role `wilma` and add wilma to the workshop_writer role
+1. Grant read access to table `ne_10m_admin_1_states_provinces_shp` to your new role `workshop_reader`
+1. Grant write access to table `cities` to your new role `workshop_writer` 
+1. Try to access and edit via QGIS 
 
 ```sql
 CREATE ROLE workshop_reader;
